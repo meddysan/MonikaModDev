@@ -25,9 +25,21 @@ init -1 python:
             if renpy.seen_label(monika_random_topics[index]):
                 monika_random_topics.pop(index)
 
+    # EXCEPTION CLass incase of bad labels
+    class MASTopicLabelException(Exception):
+        def __init__(self, msg):
+            self.msg = msg
+        def __str__(self):
+            return "MASTopicLabelException: " + self.msg
+
 init 11 python:
     #List of all random topics
     all_random_topics = list(monika_random_topics)
+
+    # go through the topics list and ensure the labels exist
+    for topic in monika_random_topics:
+        if not renpy.has_label(topic):
+            raise MASTopicLabelException("topic '" + topic + "' does not exist.")
 
     #Remove all previously seen random topics.
     remove_seen_topics()
@@ -1229,7 +1241,7 @@ init 5 python:
 label monika_debate:
     m 2a "Back in my debate club days, I learned a whole lot about arguing..."
     m "The problem with arguing is that each person sees their opinion as the superior one."
-    m "That's kind of stating the obvious, but the affects the way they try to get their point across."
+    m "That's kind of stating the obvious, but it affects the way they try to get their point across."
     m 2b "Let's say you really like a certain movie, right?"
     m "If someone comes along and tells you the movie sucks, because it did X and Y wrong..."
     m "Doesn't that make you feel kind of personally attacked?"
@@ -3408,7 +3420,7 @@ label monika_vocaloid:
     m 1c "She even carries a little keychain attached to her bag."
     m "I just find it amazing how a voice synthesizer garnered so many fans."
     m 1e "Don't you think it's funny how a character gets more of the attention than the actual voice actress?"
-    m "She's not even real but a lot of people know her worldwide."
+    m "She's not even real, but a lot of people know her worldwide."
     m "Who knows how many songs she's already made?"
     m 1d "Plus, from what I heard, her concerts are always sold out!"
     m "It's just a hologram performing live!"
@@ -4395,7 +4407,7 @@ label monika_pets:
     m 2j "I bet you can't guess what sort of pet I'd like to have..."
     m 1a "You're probably thinking of a cat or a dog, but I have something else in mind."
     m "The pet I'd like is something I saw in a book once."
-    m "It was the 'Handbook of the Birds of the World' Our library had the whole set!"
+    m "It was the 'Handbook of the Birds of the World.' Our library had the whole set!"
     m 1b "I loved looking at the gorgeous illustrations and reading about exotic birds."
     m "At first, I thought some sort of thrush would be nice, but I found something amazing in the sixth volume!"
     m "An emerald-colored bird called the Resplendant Quetzal."
@@ -4451,7 +4463,7 @@ label monika_rock:
     m 2j "That's right. Rock and roll!"
     m 3o "It's disheartening to know that most people think that rock and roll is just a bunch of noises."
     m "To tell you the truth, I judged rock too."
-    m 2c "They're no different with poems, actually."
+    m 2c "They're no different from poems, actually."
     m "Most rock songs convey a story through symbolisms, which most listeners wouldn't understand the first time they hear a rock song."
     m 3d "In fact, it's hard to compose lyrics for just one rock song."
     m "Writing good lyrics for a rock genre requires a lot of emphasis on the wordplay."
